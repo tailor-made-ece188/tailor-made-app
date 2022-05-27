@@ -23,4 +23,8 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignContent: "center"
     },
+    fitImage: {
+        height: 100,
+        width: 130
+    }
 })

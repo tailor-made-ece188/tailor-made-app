@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SERVER_BASE_URL } from "../config/apiKeys";
 import { encode } from "base-64";
-import { RegisterUserObject, UserProfile } from "../config/types";
+import { RegisterUserObject, UserProfile, UploadedPicture } from "../config/types";
+import { grabUserImages } from "../db/mongoFunctions";
 
 interface AuthContextObject {
   userToken: string;
@@ -12,7 +13,9 @@ interface AuthContextObject {
   login: (user: string, pass: string) => Promise<void>;
   logout: () => Promise<void>;
   register: (profile: RegisterUserObject) => Promise<void>;
-  getCurrentUser: () => Promise<UserProfile | null>
+  user: UserProfile | null;
+  userPics: UploadedPicture[];
+  setUserPics: React.Dispatch<React.SetStateAction<UploadedPicture[]>>;
 }
 
 const defaultAuthContext: AuthContextObject = {
@@ -21,9 +24,12 @@ const defaultAuthContext: AuthContextObject = {
   login: (user: string, pass: string) => new Promise<void>((resolve, reject) => { }),
   logout: () => new Promise<void>((resolve, reject) => { }),
   register: (profile: RegisterUserObject) => new Promise<void>((resolve, reject) => { }),
-  getCurrentUser: () => new Promise<UserProfile | null>((resolve, reject) => { }),
+  user: null,
+  userPics: [],
+  setUserPics:  ()=> {}
 }
 export const AuthContext = createContext(defaultAuthContext);
+
 
 //status:401 if invalid token
 const getCachedToken = async () => {
@@ -47,12 +53,15 @@ const setCachedToken = async (value: string) => {
   }
 };
 
+
 interface AuthProviderProps {
   children: JSX.Element
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [userToken, setUserToken] = useState("");
+  const [user,setUser] = useState<null | UserProfile>(null);
+  const [userPics, setUserPics] = useState<UploadedPicture[]>([]);
   const [isValidToken, setIsValidToken] = useState(false);
   /*grab the token from storage when app first mounts, and attempt logging in thru
   our useEffect */
@@ -78,11 +87,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       console.log("Error signing in!");
       alert("Invalid username or password");
       setIsValidToken(false);
-      setCachedToken("");
+      setUserToken("");
+      await setCachedToken("");
     } else {
       const tokenStatusData = await res.json();
       console.log("Successfully signed in");
-      setCachedToken(tokenStatusData["jwt_token"]);
+      await setCachedToken(tokenStatusData["jwt_token"]);
       setUserToken(tokenStatusData["jwt_token"]);
       setIsValidToken(true);
     }
@@ -113,16 +123,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const getCurrentUser = async () => {
+  const getCurrentUser = async (userToken : string) => {
+    console.log("Getting user info");
     const res = await fetch(SERVER_BASE_URL + "/getUser", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "access-token": userToken,
+        "auth-token": userToken,
       },
     });
+    //console.log(res);
     if (res.status === 200) {
       const json = await res.json();
+      console.log("user info");
+      console.log(json);
       const profile: UserProfile = json.profile;
       return profile;
     }
@@ -134,30 +148,58 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const attemptLoginJWT = async () => {
       if (!userToken) {
         setIsValidToken(false);
+        return;
       } else if (userToken && !isValidToken) {
+        if(user){
+          console.log("already signed in!");
+          return;
+        }
         console.log("attempting log-in with: " + userToken);
+        try{
+          console.log("validating with " + userToken);
         const res = await fetch(SERVER_BASE_URL + "/validateToken", {
-          method: "POST",
+          method: "GET",
           headers: {
-            "Content-Type": "application/json",
-            "access-token": userToken,
+            "auth-token": userToken,
           },
         });
-        console.log(res.status);
-        const tokenStatusData = await res.json();
-        console.log(tokenStatusData);
         if (res.status >= 400) {
           console.log("Error signing in!");
+          await setCachedToken("");
           setIsValidToken(false);
-          setCachedToken("");
         } else {
           console.log("Successfully signed in");
+          const tokenStatusData = await res.json();
+          console.log(tokenStatusData);
+          const user = await getCurrentUser(userToken);
+          console.log(user);
+          setUser(user);
           setIsValidToken(true);
         }
       }
+      catch(err){
+        console.error(err);
+      }
     };
+  }
+    //console.log("attempting jwt local sign-in");
     attemptLoginJWT();
   }, [userToken]);
+
+  //get pictures tied to the user when the user loads in
+  useEffect(() => {
+    if(!user){
+      return;
+    }
+    if(!userToken){
+      console.error("Error, user is set before token!");
+    }
+    console.log("Getting user's pictures!");
+    grabUserImages(userToken).then(images => {
+      console.log(images);
+      setUserPics(images);
+    })
+  }, [user]);
 
   const logout = async () => {
     console.log("Logging out...");
@@ -172,7 +214,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         login: login,
         logout: logout,
         register: register,
-        getCurrentUser: getCurrentUser,
+        user: user,
+        userPics: userPics,
+        setUserPics: setUserPics
       }}
     >
       {children}

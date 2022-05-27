@@ -14,7 +14,6 @@ export type AuthStackParamsList = {
 export default function AuthStack() {
     const Stack = createStackNavigator();
     return (
-
         <Stack.Navigator initialRouteName="Landing">
             <Stack.Screen
                 name="Landing"
