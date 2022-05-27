@@ -1,17 +1,22 @@
-import React, {useContext} from "react";
-import { SafeAreaView, View, Text, Alert, Image } from "react-native";
+import React, {useContext, useState} from "react";
+import { SafeAreaView, View, Text, Alert, Image, ScrollView } from "react-native";
 import { HomeStackParamsList } from "../../navigation/HomeStack";
 import { styles } from "../../styles";
 import { MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs';
 import { AuthContext } from "../../navigation/AuthProvider";
 import { Button } from "react-native-paper"
-import { UploadedPicture } from "../../config/types";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { UploadedPicture, UserProfile} from "../../config/types";
+//This doesnt work on Android
+//import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import {deleteUploadedImage} from "../../db/firebaseFunctions";
+import * as ImagePicker from 'expo-image-picker';
 
 type ProfileProps = MaterialBottomTabScreenProps<HomeStackParamsList, 'Profile'>;
 export default function Profile(props: ProfileProps) {
     const {logout, userPics} = useContext(AuthContext);
+    
     function attemptLogout(){
         Alert.alert(
             "Log Out",
@@ -28,24 +33,47 @@ export default function Profile(props: ProfileProps) {
             ]
         )
     }
-
-    const PicIcons = userPics.map(pic=> (<PicItem pic={pic} key={pic.image_name}/>));
+    
+    const PicIcons = userPics.map(pic=> (<PicItem pic={pic} key={pic.image_name} />));
     return (
-        <SafeAreaView>
-            <View>
-                <Text> Our Profile Page!</Text>
-                <Text>Your Uploaded Pics</Text>
-                {PicIcons}
-                <Button onPress={() => attemptLogout()} mode="contained" >Log Out</Button>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.topBar}></View>
+            <View style={styles.profileContainer3}>
+                
+                <Text style={styles.profileTitleText}>Profile</Text>
+                <Button style={styles.profileLogoutButton}onPress={() => attemptLogout()} mode="contained" >Log Out</Button>
+                <Text style={styles.profileSubtitleText}>Your Uploaded Pics</Text>
+                <ScrollView style={styles.profileContainer2}>{PicIcons}</ScrollView>
             </View>
         </SafeAreaView>
     )
 }
 
 interface PicItemProps {
-    pic: UploadedPicture
+    pic: UploadedPicture,
+    
 }
 function PicItem(props: PicItemProps){
+    const {user, userToken} = useContext(AuthContext);
+    function attemptDelete(pic: UploadedPicture){
+        if(!user) return;
+        Alert.alert(
+            "Delete Image",
+            "Are you sure you want to delete the selected image?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "Confirm",
+                    //onPress: () =>{}
+                    
+                    onPress: () => deleteUploadedImage(user, userToken, props.pic.image_name)
+                }
+            ]
+        )
+    }
     function attemptClassify(pic: UploadedPicture){
         Alert.alert(
             "Classify",
@@ -63,16 +91,17 @@ function PicItem(props: PicItemProps){
         )
     }
     return(
-        <View>
-            <Text>{props.pic.image_name}</Text>
-            <View style= {{
-                display: "flex",
-                flexDirection: "row"
-            }}>
-                <TouchableOpacity onPress={() => {
+        <View style={styles.profileContainer}>
+            
+            
+            <View >
+                <TouchableOpacity 
+                activeOpacity={0.9}
+                onPress={() => {
                    attemptClassify(props.pic)
-                }}>
-                <Image style={styles.fitImage} source={{
+                }}
+                    onLongPress={() => attemptDelete(props.pic)}>
+                <Image style={styles.fitImage}  source={{
                     uri: props.pic.uploaded_image
                 }
                 } />
@@ -84,6 +113,7 @@ function PicItem(props: PicItemProps){
                     } />
                 }
             </View>
+            <Text style={styles.profileText}>{props.pic.image_name}</Text>
         </View>
     )
 }
