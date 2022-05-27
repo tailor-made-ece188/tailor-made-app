@@ -130,8 +130,26 @@ export async function deleteUploadedImage(user: UserProfile, token: string, imag
     }
     const storage = getStorage(app);
     const deleteRef = ref(storage, `images/${user.username}/${imageName}`);
+    //classified is same ref but with _classified appended
+    const classifiedRef = ref(storage, `images/${user.username}/${imageName}_classified`);
     try{
     const deleteRes = await deleteObject(deleteRef);
+    try{
+        const classifiedRes = await deleteObject(classifiedRef);
+    }
+    catch(err){
+        console.log("No classified image");
+    }
+    await fetch(SERVER_BASE_URL + "/deleteImage", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "auth-token": token,
+        },
+        body: JSON.stringify({
+            image_name: imageName
+        })
+    })
     alert("Successfully deleted image");
     }
     catch(err){

@@ -12,10 +12,11 @@ import { TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import {deleteUploadedImage} from "../../db/firebaseFunctions";
 import * as ImagePicker from 'expo-image-picker';
+import { grabUserImages } from "../../db/mongoFunctions";
 
 type ProfileProps = MaterialBottomTabScreenProps<HomeStackParamsList, 'Profile'>;
 export default function Profile(props: ProfileProps) {
-    const {logout, userPics} = useContext(AuthContext);
+    const {logout, userPics, setUserPics } = useContext(AuthContext);
     
     function attemptLogout(){
         Alert.alert(
@@ -54,7 +55,7 @@ interface PicItemProps {
     
 }
 function PicItem(props: PicItemProps){
-    const {user, userToken} = useContext(AuthContext);
+    const {user, userToken, setUserPics} = useContext(AuthContext);
     function attemptDelete(pic: UploadedPicture){
         if(!user) return;
         Alert.alert(
@@ -69,7 +70,13 @@ function PicItem(props: PicItemProps){
                     text: "Confirm",
                     //onPress: () =>{}
                     
-                    onPress: () => deleteUploadedImage(user, userToken, props.pic.image_name)
+                    onPress: async () => {
+                        await deleteUploadedImage(user, userToken, props.pic.image_name);
+                        grabUserImages(userToken).then(images => {
+                            console.log(images);
+                            setUserPics(images);
+                          })
+                    }
                 }
             ]
         )

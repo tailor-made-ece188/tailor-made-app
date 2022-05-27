@@ -148,6 +148,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const attemptLoginJWT = async () => {
       if (!userToken) {
         setIsValidToken(false);
+        setUserPics([]);
+        setUser(null);
         return;
       } else if (userToken && !isValidToken) {
         if(user){
