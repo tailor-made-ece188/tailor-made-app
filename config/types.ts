@@ -17,3 +17,20 @@ export interface UploadedPicture {
     uploaded_image: string;
     segmented_image?: string;
 }
+
+export interface SimilarClothesType {
+    brand_name?: string | undefined | null;
+    category?: string | undefined | null;
+    currency?: string | undefined | null;
+    gender?: string | undefined | null;
+    id?: string | undefined | null;
+    images?: string[]
+    matching_image?: string | undefined | null;
+    name?: string | undefined | null;
+    price?: string | undefined | null;
+    reduced_price?: string | undefined | null;
+    score?: number
+    sub_category?: string | undefined | null;
+    url?: string | undefined | null;
+    vendor?: string | undefined | null;
+}                    

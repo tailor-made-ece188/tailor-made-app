@@ -1,6 +1,6 @@
 import React, {useContext, useState} from "react";
 import { SafeAreaView, View, Text, Alert, Image, ScrollView } from "react-native";
-import { HomeStackParamsList } from "../../navigation/HomeStack";
+import {ProfileStackParamList} from "../../navigation/ProfileStack";
 import { styles } from "../../styles";
 import { MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs';
 import { AuthContext } from "../../navigation/AuthProvider";
@@ -14,10 +14,15 @@ import {deleteUploadedImage} from "../../db/firebaseFunctions";
 import * as ImagePicker from 'expo-image-picker';
 import { grabUserImages } from "../../db/mongoFunctions";
 
-type ProfileProps = MaterialBottomTabScreenProps<HomeStackParamsList, 'Profile'>;
+type ProfileProps = MaterialBottomTabScreenProps<ProfileStackParamList, 'ProfilePage'>;
 export default function Profile(props: ProfileProps) {
     const {logout, userPics, setUserPics } = useContext(AuthContext);
-    
+    function moveToOutfitPage(imageURL :string, imageName :string){
+        props.navigation.navigate('Outfit', {
+            imageURL: imageURL,
+            imageName: imageName
+        })
+    }
     function attemptLogout(){
         Alert.alert(
             "Log Out",
@@ -35,7 +40,7 @@ export default function Profile(props: ProfileProps) {
         )
     }
     
-    const PicIcons = userPics.map(pic=> (<PicItem pic={pic} key={pic.image_name} />));
+    const PicIcons = userPics.map(pic=> (<PicItem pic={pic} key={pic.image_name} moveToOutfitPage={moveToOutfitPage} />));
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.topBar}></View>
@@ -52,7 +57,7 @@ export default function Profile(props: ProfileProps) {
 
 interface PicItemProps {
     pic: UploadedPicture,
-    
+    moveToOutfitPage: (imageURL :string, imageName :string) => void
 }
 function PicItem(props: PicItemProps){
     const {user, userToken, setUserPics} = useContext(AuthContext);
@@ -105,7 +110,7 @@ function PicItem(props: PicItemProps){
                 <TouchableOpacity 
                 activeOpacity={0.9}
                 onPress={() => {
-                   attemptClassify(props.pic)
+                   props.moveToOutfitPage(props.pic.uploaded_image, props.pic.image_name)
                 }}
                     onLongPress={() => attemptDelete(props.pic)}>
                 <Image style={styles.fitImage}  source={{
