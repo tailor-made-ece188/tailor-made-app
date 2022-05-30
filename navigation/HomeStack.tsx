@@ -1,11 +1,12 @@
 import React from "react";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs"
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Home from "../screens/Authenticated/Home";
 import Identify from "../screens/Authenticated/Identify";
 import ProfileStack from "./ProfileStack";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { styles } from "../styles";
 
 export type HomeStackParamsList = {
     Home: undefined,
@@ -14,10 +15,9 @@ export type HomeStackParamsList = {
 }
 
 export default function HomeStack() {
-    const Tab = createMaterialBottomTabNavigator<HomeStackParamsList>();
+    const Tab = createMaterialTopTabNavigator<HomeStackParamsList>();
     return (
-        <Tab.Navigator initialRouteName="Home"
-        barStyle={{backgroundColor: "#FE5F55"}}>
+        <Tab.Navigator initialRouteName="Home" tabBarPosition="bottom" style={styles.bar}>
             <Tab.Screen
                 name="Identify"
                 component={Identify}

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
-import { SafeAreaView, View, Text } from "react-native";
-import { styles } from "../../styles";
+import { SafeAreaView, View, Text, Image } from "react-native";
+import { PRIMARY_COLOR, styles } from "../../styles";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AuthStackParamsList } from '../../navigation/AuthStack';
 import { Button } from "react-native-paper";
@@ -15,26 +15,25 @@ export default function Login(props: LoginProps) {
     const { login } = useContext(AuthContext)
     return (
         <SafeAreaView style={styles.container}>
-                <Video
-                    source={require('../../assets/LandingPage/landingVideo.mp4')}
-                    style={styles.landingVideo}
-                    isLooping
-                    shouldPlay
-                    resizeMode="cover"
+                
+                <Image
+                    style={styles.landingImage3}
+                    source={require('../../assets/LandingPage/logoName2.png')}
                 />
                 <View style={styles.loginContainer}>
                     
                     <TextInput 
-                        mode="outlined" 
+                        mode="flat"
                         label="Username" 
                         value={userText} 
                         onChangeText={userText => setUserText(userText)} 
                         autoComplete={false}
                         style={styles.input}
                         autoCapitalize={"none"}
+                        
                     />
                     <TextInput 
-                        mode="outlined" 
+                        mode="flat" 
                         label="Password" 
                         value={passText} 
                         onChangeText={passText => setPassText(passText)} 
@@ -45,8 +44,8 @@ export default function Login(props: LoginProps) {
                     />
                 </View>
                 <View style={styles.loginContainer2}>
-                    <Button mode="contained" style={styles.button} onPress={() => login(userText, passText)}> Log In</Button>
-                    <Button mode="contained" style={styles.button} onPress={() => props.navigation.navigate("Landing")}> Back</Button>
+                    <Button mode="contained"  color="#fff" contentStyle={styles.buttonInner} labelStyle={{ color: PRIMARY_COLOR, fontSize: 15 }} style={styles.button} onPress={() => login(userText, passText)}> Log In</Button>
+                    <Button mode="text"  color="#fff" contentStyle={styles.buttonInner} labelStyle={{ color: PRIMARY_COLOR, fontSize: 15 }} style={styles.buttonBack} onPress={() => props.navigation.navigate("Landing")}> Back</Button>
                 </View>
                 
         </SafeAreaView>

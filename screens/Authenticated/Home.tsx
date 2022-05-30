@@ -9,8 +9,10 @@ type HomeProps = MaterialBottomTabScreenProps<HomeStackParamsList, 'Home'>;
 
 export default function Home(props: HomeProps) {
     return (
-        <SafeAreaView>
-            <View>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.homeSquare1}></View>
+            <View style={styles.homeSquare2}></View>
+            <View >
                 <Text> Our Home Page!</Text>
             </View>
         </SafeAreaView>

@@ -2,12 +2,13 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import NavigationStack from './navigation/NavigationStack';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { PRIMARY_COLOR } from './styles';
 
 const tailorMadeTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#FE5F55',
+    primary: PRIMARY_COLOR,
     accent: '#fff'
   }
 }

@@ -3,6 +3,7 @@ import React from 'react';
 import ProfileScreen from "../screens/Authenticated/Profile";
 import OutfitScreen from "../screens/Authenticated/Outfit";
 import { UploadedPicture } from '../config/types';
+import { PRIMARY_COLOR } from '../styles';
 
 export type ProfileStackParamList = {
     ProfilePage: undefined;
@@ -12,10 +13,14 @@ export type ProfileStackParamList = {
 export default function ProfileStack(){
 const Profile = createStackNavigator<ProfileStackParamList>();
 return(
-    <Profile.Navigator initialRouteName='ProfilePage'>
+    <Profile.Navigator initialRouteName='ProfilePage' >
         <Profile.Screen
             name='ProfilePage'
             component={ProfileScreen}
+            options={{cardStyle: {
+                backgroundColor: PRIMARY_COLOR,
+              }
+            }}
         />
         <Profile.Screen
             name="Outfit"

@@ -1,7 +1,7 @@
 import React, {useContext, useState} from "react";
 import { SafeAreaView, View, Text, Alert, Image, ScrollView } from "react-native";
 import {ProfileStackParamList} from "../../navigation/ProfileStack";
-import { styles } from "../../styles";
+import { PRIMARY_COLOR, styles } from "../../styles";
 import { MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs';
 import { AuthContext } from "../../navigation/AuthProvider";
 import { Button } from "react-native-paper"
@@ -42,11 +42,13 @@ export default function Profile(props: ProfileProps) {
     const PicIcons = userPics.map(pic=> (<PicItem pic={pic} key={pic.image_name} moveToOutfitPage={moveToOutfitPage} />));
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.topBar}></View>
+            <View style={styles.profileSquare1}></View>
+            <View style={styles.profileSquare2}></View>
+            
             <View style={styles.profileContainer3}>
                 
                 <Text style={styles.profileTitleText}>Profile</Text>
-                <Button style={styles.profileLogoutButton}onPress={() => attemptLogout()} mode="contained" >Log Out</Button>
+                <Button color={PRIMARY_COLOR} labelStyle={{ color: '#fff', fontSize: 12 }} contentStyle={styles.buttonBackInner} style={styles.profileLogoutButton}onPress={() => attemptLogout()} mode="contained" >Log Out</Button>
                 <Text style={styles.profileSubtitleText}>Your Uploaded Pics</Text>
                 <ScrollView style={styles.profileContainer2}>{PicIcons}</ScrollView>
             </View>

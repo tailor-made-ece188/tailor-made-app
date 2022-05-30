@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { SafeAreaView, View, Text, Image } from "react-native";
+import React, { useContext, useState, useEffect } from 'react';
+import { SafeAreaView, View, Text, Image, TouchableOpacity } from "react-native";
 import { HomeStackParamsList } from "../../navigation/HomeStack";
 import { styles } from "../../styles";;
 import * as ImagePicker from 'expo-image-picker';
@@ -9,6 +9,8 @@ import { AuthContext } from "../../navigation/AuthProvider";
 import {uploadImage} from "../../db/firebaseFunctions";
 type IdentifyProps = MaterialBottomTabScreenProps<HomeStackParamsList, 'Identify'>;
 import { grabUserImages } from "../../db/mongoFunctions";
+import { Camera, CameraType } from 'expo-camera';
+import { withNavigationFocus } from "react-navigation";
 
 export default function Identify(props: IdentifyProps) {
     const {user, userToken, setUserPics} = useContext(AuthContext);
@@ -48,12 +50,37 @@ export default function Identify(props: IdentifyProps) {
             
         }
     }
+    const [hasPermission, setHasPermission] = useState<any|null>(null);
+    const [type, setType] = useState(CameraType.back);
 
+    useEffect(() => {
+        (async () => {
+        const { status } = await Camera.requestCameraPermissionsAsync();
+        setHasPermission(status === 'granted');
+        })();
+    }, []);
+
+    if (hasPermission === null) {
+        return <View />;
+    }
+    if (hasPermission === false) {
+        return <Text>No access to camera</Text>;
+    }
     return (
-        <SafeAreaView>
-            <View>
-                <Text> Our Identify Page!</Text>
-                <Button mode="contained" onPress={pickImage}>Select Image</Button>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.cameraContainer}>
+                {/* <Text> Our Identify Page!</Text> */}
+                <Camera  type={type} style={styles.camera}>
+                <View >
+                <TouchableOpacity
+                    onPress={() => {
+                    setType(type === CameraType.back ? CameraType.front : CameraType.back);
+                    }}>
+                    <Text style={styles.cameraFlip}> Flip </Text>
+                </TouchableOpacity>
+                </View>
+            </Camera>
+                <Button mode="text" onPress={pickImage}>Select Image</Button>
                 {
                     image && !image.cancelled && 
                     <View>
