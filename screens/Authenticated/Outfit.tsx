@@ -1,9 +1,10 @@
 import { View, Text, Image, ScrollView } from "react-native";
+import { Button } from 'react-native-paper';
 import lykdatResponse from "../../db/lykdatexample.json";
 import { StackScreenProps } from '@react-navigation/stack';
 import { ProfileStackParamList } from "../../navigation/ProfileStack";
 import { SimilarClothesType } from "../../config/types";
-import { styles } from "../../styles";
+import { PRIMARY_COLOR, styles } from "../../styles";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as WebBrowser from 'expo-web-browser';
 import { useContext, useEffect, useState } from "react";
@@ -14,13 +15,28 @@ import { AuthContext } from "../../navigation/AuthProvider";
 
 type OutfitProps = StackScreenProps<ProfileStackParamList, 'Outfit'>;
 export default function Outfit(props: OutfitProps) {
-    const {userToken} = useContext(AuthContext)
+    const {userToken} = useContext(AuthContext);
     const { pic } = props.route.params;
     const { similarClothes, categoryNames } = pic;
     const [displayedFilters, setDisplayedFilters] = useState<boolean[]>([]);
     const [localSimilarClothes, setSimilarClothes] = useState(similarClothes ?? []);
     const [localCategoryNames, setLocalCategoryNames] = useState(categoryNames ?? [])
-
+    const displayedCategories = localCategoryNames.map((category,ind) => 
+        <Button  onPress={() => setDisplayedFilters(prev=> {
+            const newFilters = [...prev];
+            newFilters[ind] = !newFilters[ind];
+            return newFilters;
+        }) } key={category}
+        contentStyle={{
+            backgroundColor: displayedFilters[ind] ? PRIMARY_COLOR : "white",
+        }}
+        color={displayedFilters[ind] ? "white" : PRIMARY_COLOR}
+        mode="outlined"
+        >
+        
+        {category}
+      </Button>
+    );
 
     // const [similarClothes, setSimilarClothes] = useState<SimilarClothesType[][]>([]);
     // const [similarCategories, setSimilarCategories] = useState<string[]>([]);
@@ -49,7 +65,8 @@ export default function Outfit(props: OutfitProps) {
     // }, [imageName, imageURL])
 
     const displayedItems = localSimilarClothes.map((group, ind) => {
-        return <ClothingTypeDisplay itemList={group} itemCategory={localCategoryNames[ind] ?? "Category " + (ind+1)} key={ind} />
+        return displayedFilters[ind] ? <ClothingTypeDisplay itemList={group} itemCategory={localCategoryNames[ind] ?? "Category " + (ind+1)} key={ind} />
+        : []
     });
 
 
@@ -65,6 +82,9 @@ export default function Outfit(props: OutfitProps) {
     }, [categoryNames])
     return (
         <View>
+            <View style={styles.flexRow}>
+            {displayedCategories}
+            </View>
             <ScrollView>
                 {displayedItems}
             </ScrollView>

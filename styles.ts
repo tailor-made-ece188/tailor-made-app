@@ -55,6 +55,12 @@ export const styles = StyleSheet.create({
         height: 70,
         backgroundColor: '#FE5F55',
     },
+    flexRow: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        flexWrap: "wrap"
+    },
     containerLanding: {
         alignItems: 'center',
         justifyContent: 'center',
