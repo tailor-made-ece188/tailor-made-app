@@ -12,10 +12,14 @@ import { grabUserImages } from "../../db/mongoFunctions";
 import { Camera, CameraType } from 'expo-camera';
 import { withNavigationFocus } from "react-navigation";
 
+// var notSelected = true;
+
 export default function Identify(props: IdentifyProps) {
+    const [selected, setSelected] = useState(false);
     const {user, userToken, setUserPics} = useContext(AuthContext);
     const [image,setImage ] = useState<null | ImagePicker.ImageInfo>(null);
     const [imageName, setImageName] = useState("");
+    
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -28,6 +32,7 @@ export default function Identify(props: IdentifyProps) {
         if (!result.cancelled){
             //console.log(result.base64);
             setImage(result);
+            setSelected(true);
         }
 
     }
@@ -49,6 +54,7 @@ export default function Identify(props: IdentifyProps) {
             setImage(null);
             
         }
+        setSelected(false);
     }
     const [hasPermission, setHasPermission] = useState<any|null>(null);
     const [type, setType] = useState(CameraType.back);
@@ -59,6 +65,7 @@ export default function Identify(props: IdentifyProps) {
         setHasPermission(status === 'granted');
         })();
     }, []);
+    
 
     if (hasPermission === null) {
         return <View />;
@@ -66,27 +73,30 @@ export default function Identify(props: IdentifyProps) {
     if (hasPermission === false) {
         return <Text>No access to camera</Text>;
     }
+    
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.cameraContainer}>
                 {/* <Text> Our Identify Page!</Text> */}
-                <Camera  type={type} style={styles.camera}>
-                <View >
-                <TouchableOpacity
-                    onPress={() => {
-                    setType(type === CameraType.back ? CameraType.front : CameraType.back);
-                    }}>
-                    <Text style={styles.cameraFlip}> Flip </Text>
-                </TouchableOpacity>
-                </View>
-            </Camera>
-                <Button mode="text" onPress={pickImage}>Select Image</Button>
+                { !selected &&
+                    <Camera  type={type} style={styles.camera}>
+                    <View >
+                    <TouchableOpacity
+                        onPress={() => {
+                        setType(type === CameraType.back ? CameraType.front : CameraType.back);
+                        }}>
+                        <Text style={styles.cameraFlip}> Flip </Text>
+                    </TouchableOpacity>
+                    </View>
+                </Camera>}
+                
+                
                 {
                     image && !image.cancelled && 
-                    <View>
-                        <Image source = {{uri: image.uri }} style={{height: 200, width: 250}} />
+                    <View style={styles.identifyContainer}>
+                        <Image source = {{uri: image.uri }} style={styles.uploadImage} />
                         <TextInput 
-                            mode="outlined" 
+                            mode="flat" 
                             label="Image Name" 
                             value={imageName} 
                             onChangeText={imageName => setImageName(imageName)} 
@@ -94,10 +104,10 @@ export default function Identify(props: IdentifyProps) {
                             style={styles.input}
                             autoCapitalize={"none"}
                         />
-                        <Button mode="contained" onPress={() => attemptUpload(imageName)}>Upload</Button>
+                        <Button mode="text" contentStyle={styles.identifyButton2} onPress={() => attemptUpload(imageName)} >Upload</Button>
                     </View>
-
                 }
+                <Button mode="text" onPress={pickImage} contentStyle={styles.identifyButton2} style={styles.identifyButton}>Select Image</Button>
             </View>
         </SafeAreaView>
     )
