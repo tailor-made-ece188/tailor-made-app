@@ -19,6 +19,26 @@ export async function grabUserImages(authToken: string){
     }
 }
 
+export async function findAssociatedProducts(imageName: string, authToken: string){
+    const res = await fetch(SERVER_BASE_URL+"/findAssociated", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "auth-token": authToken,
+        },
+        body: JSON.stringify({
+            image_name: imageName
+        })
+    });
+    if(res.status >= 400){
+        alert("Error getting associated products!");
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
 export async function getAssociatedProducts(imageName: string, authToken: string){
     const res = await fetch(SERVER_BASE_URL+"/getAssociated", {
         method: "GET",
