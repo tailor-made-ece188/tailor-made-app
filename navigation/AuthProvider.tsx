@@ -196,9 +196,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     if(!userToken){
       console.error("Error, user is set before token!");
     }
-    console.log("Getting user's pictures!");
+    console.log("Getting user' s pictures!");
     grabUserImages(userToken).then(images => {
-      console.log(images);
+      //console.log(images);
       setUserPics(images);
     })
   }, [user]);

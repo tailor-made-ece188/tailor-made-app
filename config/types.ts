@@ -16,6 +16,8 @@ export interface UploadedPicture {
     image_name: string;
     uploaded_image: string;
     segmented_image?: string;
+    similarClothes?: SimilarClothesType[][],
+    categoryNames?: string[]
 }
 
 export interface SimilarClothesType {

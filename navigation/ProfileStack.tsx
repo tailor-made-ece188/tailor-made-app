@@ -2,10 +2,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import ProfileScreen from "../screens/Authenticated/Profile";
 import OutfitScreen from "../screens/Authenticated/Outfit";
+import { UploadedPicture } from '../config/types';
 
 export type ProfileStackParamList = {
     ProfilePage: undefined;
-    Outfit: { imageURL: string, imageName: string }
+    Outfit: { pic: UploadedPicture }
   };
 
 export default function ProfileStack(){

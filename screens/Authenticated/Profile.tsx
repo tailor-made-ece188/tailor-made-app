@@ -17,10 +17,9 @@ import { grabUserImages } from "../../db/mongoFunctions";
 type ProfileProps = MaterialBottomTabScreenProps<ProfileStackParamList, 'ProfilePage'>;
 export default function Profile(props: ProfileProps) {
     const {logout, userPics, setUserPics } = useContext(AuthContext);
-    function moveToOutfitPage(imageURL :string, imageName :string){
+    function moveToOutfitPage(pic: UploadedPicture){
         props.navigation.navigate('Outfit', {
-            imageURL: imageURL,
-            imageName: imageName
+            pic: pic
         })
     }
     function attemptLogout(){
@@ -57,7 +56,7 @@ export default function Profile(props: ProfileProps) {
 
 interface PicItemProps {
     pic: UploadedPicture,
-    moveToOutfitPage: (imageURL :string, imageName :string) => void
+    moveToOutfitPage: (pic: UploadedPicture) => void
 }
 function PicItem(props: PicItemProps){
     const {user, userToken, setUserPics} = useContext(AuthContext);
@@ -110,7 +109,11 @@ function PicItem(props: PicItemProps){
                 <TouchableOpacity 
                 activeOpacity={0.9}
                 onPress={() => {
-                   props.moveToOutfitPage(props.pic.uploaded_image, props.pic.image_name)
+                    if(props.pic.categoryNames && props.pic.similarClothes)
+                        props.moveToOutfitPage(props.pic);
+                    else {
+                        alert("No related images found yet!");
+                    }
                 }}
                     onLongPress={() => attemptDelete(props.pic)}>
                 <Image style={styles.fitImage}  source={{
