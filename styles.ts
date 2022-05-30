@@ -282,4 +282,19 @@ export const styles = StyleSheet.create({
         bottom:300,
         color:"#FFF",
     },
+    uploadImage:{
+        marginTop:40,
+        height:"70%",
+        width:"100%",
+    },
+    identifyButton:{
+        marginBottom:20,
+        height:50,
+    },
+    identifyButton2:{
+        height:50,
+    },
+    identifyContainer:{
+        marginBottom:-40,
+    },
 })
