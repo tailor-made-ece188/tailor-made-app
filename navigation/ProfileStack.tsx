@@ -25,6 +25,7 @@ return(
         <Profile.Screen
             name="Outfit"
             component={OutfitScreen}
+            options={({ route }) => ({ title: route.params.pic.image_name })}
         />
     </Profile.Navigator>
 )

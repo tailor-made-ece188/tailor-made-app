@@ -252,6 +252,18 @@ export const styles = StyleSheet.create({
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
     },
+    similarImage: {
+        height: 175,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
+    },
+    
+    classifiedImage: {
+        height: 320,
+        width: 200,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
+    },
     bar:{
         backgroundColor:PRIMARY_COLOR
     },

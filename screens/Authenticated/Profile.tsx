@@ -12,7 +12,7 @@ import { TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import {deleteUploadedImage} from "../../db/firebaseFunctions";
 import * as ImagePicker from 'expo-image-picker';
-import { grabUserImages, findAssociatedProducts } from "../../db/mongoFunctions";
+import { grabUserImages, findAssociatedProducts, classifyImage } from "../../db/mongoFunctions";
 import { ActivityIndicator, Colors, Modal, Portal, Provider } from 'react-native-paper';
 
 
@@ -129,8 +129,9 @@ function PicItem(props: PicItemProps){
                     else {
                         //alert("Please wait, getting related clothes! May take 30 seconds. Sit tight!");
                         props.setIsLoading(true);
+                        const classifyRes = await classifyImage(props.pic.image_name, userToken);
                         const associatedRes = await findAssociatedProducts(props.pic.image_name, userToken);
-                        if(associatedRes){
+                        if(associatedRes && classifyRes){
                             const newImages= await grabUserImages(userToken);
                             const newImage = findImage(newImages,props.pic.image_name);
                             setUserPics(newImages);
@@ -139,7 +140,7 @@ function PicItem(props: PicItemProps){
                                 props.moveToOutfitPage(newImage);
                             }
                             else {
-                                alert("Error moving!");
+                                alert("Error getting information!");
                                 props.setIsLoading(false);
                             }
                         }
@@ -155,12 +156,7 @@ function PicItem(props: PicItemProps){
                 }
                 } />
                 </TouchableOpacity>
-                {
-                    props.pic.segmented_image  && <Image style={styles.fitImage} source={{
-                        uri: props.pic.segmented_image
-                    }
-                    } />
-                }
+
             </View>
             <Text style={styles.profileText}>{props.pic.image_name}</Text>
         </View>

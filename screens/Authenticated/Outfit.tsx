@@ -8,10 +8,8 @@ import { PRIMARY_COLOR, styles } from "../../styles";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as WebBrowser from 'expo-web-browser';
 import { useContext, useEffect, useState } from "react";
-import { SERVER_BASE_URL } from "../../config/apiKeys";
 import { getAssociatedProducts } from "../../db/mongoFunctions";
 import { AuthContext } from "../../navigation/AuthProvider";
-
 
 type OutfitProps = StackScreenProps<ProfileStackParamList, 'Outfit'>;
 export default function Outfit(props: OutfitProps) {
@@ -20,6 +18,7 @@ export default function Outfit(props: OutfitProps) {
     const { similarClothes, categoryNames } = pic;
     const [displayedFilters, setDisplayedFilters] = useState<boolean[]>([]);
     const [localSimilarClothes, setSimilarClothes] = useState(similarClothes ?? []);
+    const [viewClassified, setViewClassified] = useState(true);
     const [localCategoryNames, setLocalCategoryNames] = useState(categoryNames ?? [])
     const displayedCategories = localCategoryNames.map((category,ind) => 
         <Button  onPress={() => setDisplayedFilters(prev=> {
@@ -83,7 +82,28 @@ export default function Outfit(props: OutfitProps) {
     return (
         <View>
             <View style={styles.flexRow}>
+                <Button  onPress={() => setViewClassified(prev=> !prev) }
+                contentStyle={{
+                    backgroundColor: viewClassified ? PRIMARY_COLOR : "white",
+                }}
+                color={viewClassified ? "white" : PRIMARY_COLOR}
+                mode="outlined"
+                >
+                    View Classified?
+                </Button>
+            </View>
+            <View style={styles.flexRow}>
+
             {displayedCategories}
+            </View>
+            <View style={styles.flexRow}>
+            {
+                    viewClassified && <Image style={styles.classifiedImage} source={{
+                        uri: props.route.params.pic.segmented_image
+                    }
+                    
+                    } />
+                }
             </View>
             <ScrollView>
                 {displayedItems}
@@ -134,7 +154,7 @@ function ArticleDisplay(props: ArticleDisplayProps) {
                 {`PRICE: $${props.item.price}`}
             </Text>
             <TouchableOpacity onPress={async() => openProductPage(props.item.url ?? '')}>
-                <Image style={styles.fitImage} source= {{
+                <Image style={styles.similarImage} source= {{
                         uri: props.item.matching_image ?? ''
                     }
                 }/>

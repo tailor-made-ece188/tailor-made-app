@@ -1,4 +1,4 @@
-import { SERVER_BASE_URL } from "../config/apiKeys"
+import { SERVER_BASE_URL, MODEL_SERVER_BASE_URL } from "../config/apiKeys"
 import { UploadedPicture, SimilarClothesType } from "../config/types";
 export async function grabUserImages(authToken: string){
     const res = await fetch(SERVER_BASE_URL+"/getImages", {
@@ -17,6 +17,24 @@ export async function grabUserImages(authToken: string){
         const userImages : UploadedPicture[] = resData.images;
         return userImages;
     }
+}
+
+export async function classifyImage(imageName: string, authToken: string){
+    const res = await fetch(MODEL_SERVER_BASE_URL+"/classifyImage", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "auth-token": authToken,
+        },
+        body: JSON.stringify({
+            image_name: imageName
+        })
+    });
+    if (res.status >= 400){
+        alert("Error classifying outfit!");
+        return false;
+    }
+    else return true;
 }
 
 export async function findAssociatedProducts(imageName: string, authToken: string){
@@ -66,3 +84,4 @@ export async function getAssociatedProducts(imageName: string, authToken: string
         })
     }
 }
+

@@ -20,11 +20,8 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSAppTransportSecurity": {
-          "NSExceptionDomains": {
-            "128.97.51.47:8080": {
-              "NSExceptionAllowsInsecureHTTPLoads": true
-            }
-          }
+          "NSAllowsArbitraryLoads": true,
+          "NSAllowsLocalNetworking": true
         }
       }
     },
