@@ -289,6 +289,9 @@ export const styles = StyleSheet.create({
     camera:{
         height:"93%",
         width:"100%",
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignContent: "center",
     },
     cameraContainer:{
         width:"100%",
@@ -296,9 +299,19 @@ export const styles = StyleSheet.create({
         
     },
     cameraFlip:{
-        position:'absolute',
-        bottom:300,
+        fontSize:16,
         color:"#FFF",
+        position:'absolute',
+        top:200,
+        left:20,
+    },
+    cameraCapture:{
+        
+        backgroundColor:"#FFF",
+        height:60,
+        width:60,
+        borderRadius:70,
+        top:270,
     },
     uploadImage:{
         marginTop:40,
