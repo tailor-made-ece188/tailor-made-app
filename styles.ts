@@ -9,6 +9,11 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignContent: "center"
     },
+    uploadPicContainer: {
+        // display: "flex", 
+        // flexDirection: "row",
+        // alignContent: "center"
+    },
     landingSquare:{
         backgroundColor:PRIMARY_COLOR,
         height: "100%",
@@ -300,11 +305,12 @@ export const styles = StyleSheet.create({
         elevation:2,
     },
     camera:{
-        height:"93%",
+        height:"60%",
         width:"100%",
         alignItems: 'center',
         justifyContent: 'center',
         alignContent: "center",
+        position: "relative"
     },
     cameraContainer:{
         width:"100%",
@@ -319,16 +325,17 @@ export const styles = StyleSheet.create({
         left:20,
     },
     cameraCapture:{
-        
         backgroundColor:"#FFF",
+        position: "absolute",
         height:60,
         width:60,
         borderRadius:70,
-        top:270,
+        top:130,
+        left: -30
     },
     uploadImage:{
         marginTop:40,
-        height:"70%",
+        height:"60%",
         width:"100%",
     },
     identifyButton:{

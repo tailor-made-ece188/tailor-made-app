@@ -11,6 +11,8 @@ type IdentifyProps = MaterialBottomTabScreenProps<HomeStackParamsList, 'Identify
 import { grabUserImages } from "../../db/mongoFunctions";
 import { Camera, CameraType } from 'expo-camera';
 import { withNavigationFocus } from "react-navigation";
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
+
 
 export default function Identify(props: IdentifyProps) {
     const [selected, setSelected] = useState(false);
@@ -31,7 +33,11 @@ export default function Identify(props: IdentifyProps) {
         console.log(result);
         if (!result.cancelled){
             //console.log(result.base64);
-            setImURI(result.uri);
+            const compressedImage = await manipulateAsync(result.uri, undefined, {
+                compress : 0.7
+            });
+
+            setImURI(compressedImage.uri);
             setSelected(true);
             setSnapped(true);
         }
@@ -76,9 +82,12 @@ export default function Identify(props: IdentifyProps) {
         if (cameraRef && cameraRef.current){
             const photo = await cameraRef.current.takePictureAsync();
             console.log(photo);
+            const compressedImage = await manipulateAsync(photo.uri, undefined, {
+                compress : 0.7
+            });
+            setImURI(compressedImage.uri);
             setSelected(true);
             setSnapped(true);
-            setImURI(photo.uri);
         }
         else {
             console.log("No camera ref!");
@@ -124,16 +133,16 @@ export default function Identify(props: IdentifyProps) {
                 {
                     snap && imURI ?  
                     <View style={styles.identifyContainer}>
-                        <Image source = {{uri: imURI }} style={styles.uploadImage} />
-                        <TextInput 
-                            mode="flat" 
-                            label="Image Name" 
-                            value={imageName} 
-                            onChangeText={imageName => setImageName(imageName)} 
-                            autoComplete={false}
-                            style={styles.input}
-                            autoCapitalize={"none"}
-                        />
+                            <Image source = {{uri: imURI }} style={styles.uploadImage} />
+                            <TextInput 
+                                mode="flat" 
+                                label="Image Name" 
+                                value={imageName} 
+                                onChangeText={imageName => setImageName(imageName)} 
+                                autoComplete={false}
+                                style={styles.input}
+                                autoCapitalize={"none"}
+                            />
                         <Button mode="text" contentStyle={styles.identifyButton2} onPress={() => attemptUpload(imageName)} >Upload</Button>
                     </View>
                     : 
