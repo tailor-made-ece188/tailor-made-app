@@ -18,6 +18,7 @@ export interface UploadedPicture {
     segmented_image?: string;
     similarClothes?: SimilarClothesType[][],
     categoryNames?: string[]
+    public?: boolean
 }
 
 export interface SimilarClothesType {

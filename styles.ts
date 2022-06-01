@@ -1,3 +1,4 @@
+import { relative } from "path";
 import { StyleSheet } from "react-native";
 export const PRIMARY_COLOR = '#FE5F55'
 export const styles = StyleSheet.create({
@@ -180,6 +181,7 @@ export const styles = StyleSheet.create({
     },
     profileContainer: {
         width:"100%",
+        position: "relative",
         backgroundColor: '#FE5F55',
         alignItems: 'center',
         justifyContent: 'center',
@@ -190,6 +192,14 @@ export const styles = StyleSheet.create({
         borderWidth:3,
         paddingBottom:5,
         elevation:1,
+    },
+    publicToggle: {
+        position: "absolute",
+        right: 10,
+        width: 50,
+        top: 10,
+        height: 50,
+        zIndex: 3
     },
     profileContainer2: {
         width:"100%",
@@ -263,6 +273,9 @@ export const styles = StyleSheet.create({
         width: 200,
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
+    },
+    picItem: {
+        position: "relative"
     },
     bar:{
         backgroundColor:PRIMARY_COLOR

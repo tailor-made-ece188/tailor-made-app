@@ -4,15 +4,15 @@ import {ProfileStackParamList} from "../../navigation/ProfileStack";
 import { PRIMARY_COLOR, styles } from "../../styles";
 import { MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs';
 import { AuthContext } from "../../navigation/AuthProvider";
-import { Button } from "react-native-paper"
+import { Button } from "react-native-paper";
 import { UploadedPicture, UserProfile} from "../../config/types";
 //This doesnt work on Android
 //import { TouchableOpacity } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import {deleteUploadedImage} from "../../db/firebaseFunctions";
 import * as ImagePicker from 'expo-image-picker';
-import { grabUserImages, findAssociatedProducts, classifyImage } from "../../db/mongoFunctions";
+import { grabUserImages, findAssociatedProducts, classifyImage, updatePublicValue } from "../../db/mongoFunctions";
 import { ActivityIndicator, Colors, Modal, Portal, Provider } from 'react-native-paper';
 
 
@@ -61,7 +61,7 @@ export default function Profile(props: ProfileProps) {
                     <Button color={PRIMARY_COLOR} labelStyle={{ color: '#fff', fontSize: 12 }} contentStyle={styles.buttonBackInner} style={styles.profileLogoutButton}onPress={() => attemptLogout()} mode="contained" >Log Out</Button>
                     <Text style={styles.profileSubtitleText}>Your Uploaded Pics</Text>
                     { isLoading ? <LoadingModal/> :
-                    <ScrollView style={styles.profileContainer2}>{PicIcons}</ScrollView>
+                    <ScrollView >{PicIcons}</ScrollView>
     }
                 </View>
         </SafeAreaView>
@@ -73,8 +73,10 @@ interface PicItemProps {
     moveToOutfitPage: (pic: UploadedPicture) => void
     setIsLoading: (val : boolean) => void
 }
-function PicItem(props: PicItemProps){
+export function PicItem(props: PicItemProps){
+    const [currPublic, setCurrPublic] = useState(props.pic.public ?? 'false');
     const {user, userToken, setUserPics} = useContext(AuthContext);
+    const isSameUser = user?.uid == props.pic.uid;
     function attemptDelete(pic: UploadedPicture){
         if(!user) return;
         Alert.alert(
@@ -92,7 +94,7 @@ function PicItem(props: PicItemProps){
                     onPress: async () => {
                         await deleteUploadedImage(user, userToken, props.pic.image_name);
                         grabUserImages(userToken).then(images => {
-                            console.log(images);
+                            //console.log(images);
                             setUserPics(images);
                           })
                     }
@@ -100,27 +102,60 @@ function PicItem(props: PicItemProps){
             ]
         )
     }
-    function attemptClassify(pic: UploadedPicture){
-        Alert.alert(
-            "Classify",
-            "Are you sure you want to classify this image?",
-            [
-                {
-                    text: "Cancel",
-                    style: "cancel"
-                },
-                {
-                    text: "Classify",
-                    onPress: () => {}
-                }
-            ]
-        )
+    function attemptTogglePublic(pic: UploadedPicture){
+        if(currPublic){
+            Alert.alert(
+                "Privatize",
+                "Are you sure you want to privatize this outfit?",
+                [
+                    {
+                        text: "Cancel",
+                        style: "cancel"
+                    },
+                    {
+                        text: "Privatize",
+                        onPress: async () => {
+                            await updatePublicValue(pic.image_name, false, userToken);
+                            setCurrPublic(false);
+                        }
+                    }
+                ]
+            )
+        }
+        else {
+            Alert.alert(
+                "Publicize",
+                "Are you sure you want to publicize this outfit?",
+                [
+                    {
+                        text: "Cancel",
+                        style: "cancel"
+                    },
+                    {
+                        text: "Publicize",
+                        onPress: async () => {
+                            await updatePublicValue(pic.image_name, true, userToken);
+                            setCurrPublic(true);
+                        }
+                    }
+                ]
+            )
+        }
     }
+
     return(
         <View style={styles.profileContainer}>
-            
-            
             <View >
+            {    isSameUser && 
+                <TouchableOpacity style = {styles.publicToggle} onPress={() => attemptTogglePublic(props.pic)}>
+                    <MaterialCommunityIcon name="star-circle-outline" size={50} color={ currPublic ? "#f2c71d" : "white"} style={{
+                        backgroundColor: "transparent",
+                        width: 50,
+                        borderRadius: 5
+                        
+                    }}/>
+                </TouchableOpacity>
+            }
                 <TouchableOpacity 
                 activeOpacity={0.9}
                 onPress={async () => {
@@ -150,7 +185,10 @@ function PicItem(props: PicItemProps){
                         
                     }
                 }}
-                    onLongPress={() => attemptDelete(props.pic)}>
+                    onLongPress={() => {
+                        if(isSameUser)
+                        attemptDelete(props.pic)
+                    }}>
                 <Image style={styles.fitImage}  source={{
                     uri: props.pic.uploaded_image
                 }

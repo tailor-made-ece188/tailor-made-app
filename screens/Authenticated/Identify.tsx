@@ -51,7 +51,7 @@ export default function Identify(props: IdentifyProps) {
         // }
         const res = await uploadImage(user, userToken, imageName, image);
         grabUserImages(userToken).then(images => {
-            console.log(images);
+            //console.log(images);
             setUserPics(images);
           })
         if(res){

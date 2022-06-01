@@ -1,6 +1,6 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import Home from "../screens/Authenticated/Home";
+import Public from "./PublicStack";
 import Identify from "../screens/Authenticated/Identify";
 import ProfileStack from "./ProfileStack";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -33,7 +33,7 @@ export default function HomeStack() {
             />
             <Tab.Screen
                 name="Home"
-                component={Home}
+                component={Public}
                 options={{
                     tabBarIcon: ({ color }) => (
                       <MaterialIcons

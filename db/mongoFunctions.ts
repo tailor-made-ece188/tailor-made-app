@@ -19,6 +19,45 @@ export async function grabUserImages(authToken: string){
     }
 }
 
+export async function grabPublicImages(authToken: string){
+    const res = await fetch(SERVER_BASE_URL + "/getPublicImages", {
+        method: "GET",
+        headers: {
+            "auth-token":authToken
+        }
+    });
+    if (res.status >=400){
+        console.error("Error fetching images");
+        return [];
+    }
+    else {
+        const resData = await res.json();
+        const publicImages : UploadedPicture[] = resData.images;
+        return publicImages;
+    }
+}
+
+export async function updatePublicValue(imageName: string, newVal: boolean, authToken: string){
+    const res = await fetch(SERVER_BASE_URL + "/updatePublic", {
+        method: "POST",
+        headers: {
+            "auth-token": authToken,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            image_name: imageName,
+            val: newVal
+        })
+    });
+    if (res.status >=400){
+        console.error("Error updating value");
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
 export async function classifyImage(imageName: string, authToken: string){
     const res = await fetch(MODEL_SERVER_BASE_URL+"/classifyImage", {
         method: "POST",
