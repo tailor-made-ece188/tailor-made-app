@@ -17,12 +17,11 @@ if (!firebase.apps.length) app = firebase.initializeApp(FIREBASE_CONFIG);
 else app = firebase.app();
 console.log("Firebase set up!");
 
-export async function uploadImage(user : UserProfile, token: string, imageName : string, image: ImagePicker.ImageInfo){
+export async function uploadImage(user : UserProfile, token: string, imageName : string, uri: string){
     if(!app){
         return null;
     }
     const storage = getStorage(app);
-    const uri = image.uri;
     const res = await fetch(uri);
     const blob = await res.blob();
     //upload file
