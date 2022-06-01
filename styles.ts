@@ -118,7 +118,17 @@ export const styles = StyleSheet.create({
         height: 60,
         justifyContent: "center",
         width:"120%",
-        backgroundColor:"#fff",
+        backgroundColor: "#fff",
+        borderBottomColor: '#fff',
+        marginBottom:15,
+        fontSize:16,
+    },
+    renameInput: {
+        minWidth: 40,
+        height: 50,
+        justifyContent: "center",
+        width:300,
+        backgroundColor: "#bf6a65",
         borderBottomColor: '#fff',
         marginBottom:15,
         fontSize:16,
@@ -348,4 +358,13 @@ export const styles = StyleSheet.create({
     identifyContainer:{
         marginBottom:-40,
     },
+    renameModal: {
+        height: "30%",
+        width: "100%",
+        backgroundColor: "white",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center"
+    }
 })

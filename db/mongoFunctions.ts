@@ -124,3 +124,44 @@ export async function getAssociatedProducts(imageName: string, authToken: string
     }
 }
 
+export async function updateAssociatedCategory(imageName: string, index: number, newName: string, authToken: string){
+    const res = await fetch(SERVER_BASE_URL + "/updateAssociatedCategory", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "auth-token": authToken,
+        },
+        body: JSON.stringify({
+            image_name: imageName,
+            index: index,
+            new_name: newName
+        })
+    });
+    if(res.status >= 400){
+        console.error("Error updating associated category");
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
+export async function getAssociatedCategories(imageName: string, authToken: string){
+    const res = await fetch(SERVER_BASE_URL + "/getAssociatedCategories?" + new URLSearchParams({
+        image_name: imageName
+    }), {
+        method: "GET",
+        headers: {
+            "auth-token": authToken,
+        },
+    });
+    if (res.status >=400){
+        console.error("Error getting associated categories");
+        return false;
+    }
+    else {
+        const resData = await res.json();
+        const categories : string[] = resData.categories;
+        return categories;
+    }
+}
