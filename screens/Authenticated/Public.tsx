@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView, View, Text } from "react-native";
 import { HomeStackParamsList } from "../../navigation/HomeStack";
-import { styles } from "../../styles";
+import { PRIMARY_COLOR, styles } from "../../styles";
 import { UploadedPicture} from "../../config/types";
 import type { MaterialBottomTabScreenProps } from "@react-navigation/material-bottom-tabs";
 import { grabPublicImages } from "../../db/mongoFunctions";
@@ -9,6 +9,8 @@ import { AuthContext } from "../../navigation/AuthProvider";
 import { PicItem } from "./Profile";
 import { PublicStackParamList } from "../../navigation/PublicStack";
 import { ScrollView } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 type PublicProps = MaterialBottomTabScreenProps<PublicStackParamList, 'Public'>;
 
 export default function Public(props: PublicProps) {
@@ -33,6 +35,14 @@ export default function Public(props: PublicProps) {
             <ScrollView>
                 {displayedOutfits}
             </ScrollView>
+            <TouchableOpacity style = {styles.publicToggle} >
+                    <MaterialCommunityIcon name="account-multiple" size={50} color={ PRIMARY_COLOR} style={{
+                        backgroundColor: "transparent",
+                        width: 50,
+                        borderRadius: 5
+                        
+                    }}/>
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }

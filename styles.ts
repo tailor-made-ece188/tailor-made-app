@@ -338,6 +338,14 @@ export const styles = StyleSheet.create({
         position: "relative"
         
     },
+    nonClassifiedImage:{
+        height: 340,
+        width: 340,
+        borderWidth:2,
+        borderColor:PRIMARY_COLOR,
+        zIndex: -1,
+        position: "relative"
+    },
     picItem: {
         position: "relative"
     },
@@ -482,10 +490,15 @@ export const styles = StyleSheet.create({
         marginBottom:10,
     },
     drawModal:{
-        marginLeft:40,
+        marginLeft:27,
     },
     drawContainer:{
         backgroundColor:"#fff",
-        
+        width:340,
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignContent: "center",
+        position: "relative",
+        borderRadius:20,
     },
 })
