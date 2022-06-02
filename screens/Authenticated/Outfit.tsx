@@ -116,8 +116,12 @@ export default function Outfit(props: OutfitProps) {
                 </Modal> 
             </Portal>
             <View>
-                <View style={styles.flexRow}>
+                {/* <View style={styles.flexRow}>
+
+                </View> */}
+                <ScrollView contentContainerStyle={styles.categoryRow} horizontal={true} alwaysBounceVertical={false} showsVerticalScrollIndicator={false}>
                     <Button  onPress={() => setViewClassified(prev=> !prev) }
+<<<<<<< HEAD
                     contentStyle={{
                         backgroundColor: viewClassified ? PRIMARY_COLOR : "white",
                         height:50,
@@ -134,14 +138,31 @@ export default function Outfit(props: OutfitProps) {
                 </View>
                 
                 <View style={styles.flexRow}>
+=======
+                        contentStyle={{
+                            backgroundColor: viewClassified ? PRIMARY_COLOR : "white",
+                            zIndex: 3
+                        }}
+                        color={viewClassified ? "white" : PRIMARY_COLOR}
+                        mode="outlined"
+                        >
+                            View Classified?
+                    </Button>
+                    {displayedCategories}
+                </ScrollView>
+>>>>>>> b85b12dc847c5f6257cd5de67a70f028925fd144
                 {
-                        viewClassified && <Image style={styles.classifiedImage} source={{
-                            uri: props.route.params.pic.segmented_image
+                    viewClassified && 
+                    <View style={styles.classifiedImageRow}>
+                        {
+                            <Image style={styles.classifiedImage} source={{
+                                uri: props.route.params.pic.segmented_image
+                            }
+                            } />
                         }
-                        
-                        } />
-                    }
-                </View>
+                    </View>
+                }
+                
                 <ScrollView>
                     {displayedItems}
                 </ScrollView>

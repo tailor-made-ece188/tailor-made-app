@@ -27,7 +27,7 @@ function findImage(pics: UploadedPicture[], imageName: string){
 type ProfileProps = MaterialBottomTabScreenProps<ProfileStackParamList, 'ProfilePage'>;
 export default function Profile(props: ProfileProps) {
     const [isLoading, setIsLoading] = useState(false);
-    const {logout, userPics, setUserPics } = useContext(AuthContext);
+    const {logout, userPics, setUserPics, user } = useContext(AuthContext);
     function moveToOutfitPage(pic: UploadedPicture){
         props.navigation.navigate('Outfit', {
             pic: pic
@@ -57,7 +57,7 @@ export default function Profile(props: ProfileProps) {
                 <View style={styles.profileSquare2}></View>
                 
                 <View style={styles.profileContainer3}>
-                    <Text style={styles.profileTitleText}>Profile</Text>
+                    <Text style={styles.profileTitleText}>{user?.username}</Text>
                     <Button color={PRIMARY_COLOR} labelStyle={{ color: '#fff', fontSize: 12 }} contentStyle={styles.buttonBackInner} style={styles.profileLogoutButton}onPress={() => attemptLogout()} mode="contained" >Log Out</Button>
                     <Text style={styles.profileSubtitleText}>Your Pictures</Text>
                     { isLoading ? <LoadingModal/> :
