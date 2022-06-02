@@ -17,8 +17,14 @@ export interface UploadedPicture {
     uploaded_image: string;
     segmented_image?: string;
     similarClothes?: SimilarClothesType[][],
-    categoryNames?: string[]
-    public?: boolean
+    categoryNames?: string[];
+    public?: boolean;
+    confidences?: Confidence[]
+}
+
+interface Confidence {
+    score: number;
+    label: string
 }
 
 export interface SimilarClothesType {

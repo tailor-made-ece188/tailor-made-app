@@ -1,9 +1,9 @@
 import { View, Text, Image, ScrollView } from "react-native";
-import { Button, Modal, Portal, Provider, TextInput } from 'react-native-paper';
+import { Button, Modal, Portal, Provider, TextInput, DataTable } from 'react-native-paper';
 import lykdatResponse from "../../db/lykdatexample.json";
 import { StackScreenProps } from '@react-navigation/stack';
 import { ProfileStackParamList } from "../../navigation/ProfileStack";
-import { SimilarClothesType } from "../../config/types";
+import { Confidence, SimilarClothesType } from "../../config/types";
 import { PRIMARY_COLOR, styles } from "../../styles";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as WebBrowser from 'expo-web-browser';
@@ -135,9 +135,11 @@ export default function Outfit(props: OutfitProps) {
                                         uri: props.route.params.pic.uploaded_image
                                     }
                                     } />
+                        
                         <Button>Upload</Button>
+                        <ConfidenceTable confidences={pic.confidences ?? []} imageName={pic.image_name}/>
                     </View>
-
+                    
                 </Modal> 
             </Portal>
             
@@ -180,6 +182,31 @@ export default function Outfit(props: OutfitProps) {
                 </ScrollView>
             </View>
         </Provider>
+    )
+}
+
+
+interface ConfidenceTableProps {
+    confidences: Confidence[],
+    imageName: string
+}
+function ConfidenceTable(props: ConfidenceTableProps ){
+    const confidenceRows = props.confidences.map(confidence => (
+        <DataTable.Row>
+            <DataTable.Cell>{confidence.label}</DataTable.Cell>
+            <DataTable.Cell numeric>{confidence.score}</DataTable.Cell>
+        </DataTable.Row>
+    ))
+    return(
+        <DataTable style={{
+            backgroundColor: "gray",
+        }}>
+            <DataTable.Header>
+                <DataTable.Title>Category</DataTable.Title>
+                <DataTable.Title numeric>Confidence (%)</DataTable.Title>
+            </DataTable.Header>
+            {confidenceRows}
+        </DataTable>
     )
 }
 
