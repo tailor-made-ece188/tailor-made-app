@@ -88,7 +88,7 @@ export const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
-        height: 40,
+        height: 50,
         zIndex: 4,
         elevation: 1,
         marginBottom: 5
@@ -140,6 +140,16 @@ export const styles = StyleSheet.create({
         height:"100%",
     },
     input: {
+        minWidth: 40,
+        height: 60,
+        justifyContent: "center",
+        width:"120%",
+        backgroundColor: "#fff",
+        borderBottomColor: '#fff',
+        marginBottom:15,
+        fontSize:16,
+    },
+    nameInput: {
         minWidth: 40,
         height: 60,
         justifyContent: "center",
@@ -310,10 +320,12 @@ export const styles = StyleSheet.create({
     },
     
     classifiedImage: {
-        height: 350,
-        width: 400,
+        height: 300,
+        width: 350,
         borderWidth:2,
         borderColor:PRIMARY_COLOR,
+        zIndex: -1,
+        position: "relative"
         
     },
     picItem: {
@@ -358,10 +370,10 @@ export const styles = StyleSheet.create({
     },
     cameraFlip:{
         fontSize:16,
-        color:"#FFF",
+        color:"#000",
         position:'absolute',
-        top:200,
-        left:20,
+        top:-350,
+        left:-150,
     },
     cameraCapture:{
         backgroundColor:"#FFF",
@@ -374,8 +386,8 @@ export const styles = StyleSheet.create({
     },
     uploadImage:{
         marginTop:40,
-        height:"60%",
-        width:"100%",
+        height:200,
+        width:200,
     },
     identifyButton:{
         marginBottom:20,

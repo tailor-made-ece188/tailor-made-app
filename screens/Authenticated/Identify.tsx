@@ -59,7 +59,6 @@ export default function Identify(props: IdentifyProps) {
           })
         if(res){
             setImURI("");
-            
         }
         setSelected(false);
     }
@@ -106,6 +105,11 @@ export default function Identify(props: IdentifyProps) {
         // }
     }
     
+    function removeImage(){
+        setImURI("");
+        setSelected(false);
+        setSnapped(false);
+    }
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.cameraContainer}>
@@ -131,19 +135,9 @@ export default function Identify(props: IdentifyProps) {
                     </TouchableOpacity>
                 
                 {
-                    snap && imURI ?  
+                    imURI ?  
                     <View style={styles.identifyContainer}>
                             <Image source = {{uri: imURI }} style={styles.uploadImage} />
-                            <TextInput 
-                                mode="flat" 
-                                label="Image Name" 
-                                value={imageName} 
-                                onChangeText={imageName => setImageName(imageName)} 
-                                autoComplete={false}
-                                style={styles.input}
-                                autoCapitalize={"none"}
-                            />
-                        <Button mode="text" contentStyle={styles.identifyButton2} onPress={() => attemptUpload(imageName)} >Upload</Button>
                     </View>
                     : 
                     selected ? <View style={styles.identifyContainer}>
@@ -157,10 +151,20 @@ export default function Identify(props: IdentifyProps) {
                         style={styles.input}
                         autoCapitalize={"none"}
                     />
-                    <Button mode="text" contentStyle={styles.identifyButton2} onPress={() => attemptUpload(imageName)} >Upload</Button>
                 </View> : null
                 }
-                <Button mode="text" onPress={pickImage} contentStyle={styles.identifyButton2} style={styles.identifyButton}>Select Image</Button>
+                {imURI ?   <TextInput 
+                                mode="flat" 
+                                label="Image Name" 
+                                value={imageName} 
+                                onChangeText={imageName => setImageName(imageName)} 
+                                autoComplete={false}
+                                style={styles.nameInput}
+                                autoCapitalize={"none"}
+                            /> : null}
+                {imURI ? <Button mode="text" contentStyle={styles.identifyButton2} onPress={() => attemptUpload(imageName)} >Upload</Button> : null}
+                { !imURI ? <Button mode="text" onPress={pickImage} contentStyle={styles.identifyButton2} style={styles.identifyButton}>Select Image</Button> : null}
+                {imURI ? <Button mode="text" onPress={() => removeImage()} contentStyle={styles.identifyButton2} style={styles.identifyButton}>Remove Image</Button> : null}
             </View>
         </SafeAreaView>
     )
