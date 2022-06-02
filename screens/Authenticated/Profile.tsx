@@ -77,6 +77,16 @@ export function PicItem(props: PicItemProps){
     const [currPublic, setCurrPublic] = useState(props.pic.public ?? 'false');
     const {user, userToken, setUserPics} = useContext(AuthContext);
     const isSameUser = user?.uid == props.pic.uid;
+    function getUsernameFromPic(pic: UploadedPicture){
+        const decoded = decodeURIComponent(pic.uploaded_image);
+        console.log(decoded);
+        const truncated = decoded.substring(decoded.indexOf("images/"));
+        //console.log(truncated);
+        const split = truncated.split("/"); 
+        console.log(split);
+        return split[1] ?? "";
+    }
+    const username = getUsernameFromPic(props.pic);
     function attemptDelete(pic: UploadedPicture){
         if(!user) return;
         Alert.alert(
@@ -197,7 +207,10 @@ export function PicItem(props: PicItemProps){
                 </TouchableOpacity>
 
             </View>
-            <Text style={styles.profileText}>{props.pic.image_name}</Text>
+            <View style={styles.profileText}>
+                <Text >{props.pic.image_name}</Text>
+                <Text >By: {username}</Text>
+                </View>
         </View>
     )
 }

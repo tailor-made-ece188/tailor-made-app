@@ -267,7 +267,10 @@ export const styles = StyleSheet.create({
     },
     profileText:{
         fontSize:16,
-        color:"#fff"
+        color:"#fff",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: 280
     },
     profileTitleText:{
         fontSize:30,
