@@ -127,13 +127,15 @@ export default function Outfit(props: OutfitProps) {
                 </Modal>
                 <Modal visible={modal} onDismiss={()=>setModal(false)} contentContainerStyle={styles.drawModal}>
                     <View style={styles.drawContainer}>
-                        <CanvasSketch/>
-                        {/* <Image style={styles.classifiedImage2} source={{
-                                        uri: props.route.params.pic.uploaded_image
+                        {/* <CanvasSketch /> */}
+                        <Image style={styles.nonClassifiedImage} source={{
+                                        uri: props.route.params.pic.segmented_image ?? ''
                                     }
-                                    } /> */}
+                                    } 
+                                    resizeMethod="scale"
+                                    resizeMode="contain"/>
                         
-                        <Button>Upload</Button>
+                        
                         <ConfidenceTable confidences={pic.confidences ?? []} imageName={pic.image_name}/>
                     </View>
                     
@@ -196,7 +198,8 @@ function ConfidenceTable(props: ConfidenceTableProps ){
     ))
     return(
         <DataTable style={{
-            backgroundColor: "gray",
+            backgroundColor: "white",
+            width:340,
         }}>
             <DataTable.Header>
                 <DataTable.Title>Category</DataTable.Title>
