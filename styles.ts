@@ -64,33 +64,34 @@ export const styles = StyleSheet.create({
     },
     flexRow: {
         justifyContent: "center",
-        marginTop:45,
+        elevation:1,
     },
     buttonRow:{
         position:'absolute',
-        height:50,
+        height:30,
         elevation:2,
         top:0,
         backgroundColor: '#00000000'
     },
     buttonRowButton:{
-        height:50,
+        height:40,
     },
     classifiedImageRow: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
         flexWrap: "wrap",
-        marginTop: 10,
-        backgroundColor: "transparent"
+        marginTop: 20,
+        backgroundColor: '#00000000'
     },
     categoryRow: {
+        
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
         height: 50,
         zIndex: 4,
-        elevation: 1,
+        elevation: 2,
         marginBottom: 5
     },
     containerLanding: {
@@ -164,8 +165,8 @@ export const styles = StyleSheet.create({
         height: 50,
         justifyContent: "center",
         width:300,
-        backgroundColor: "#bf6a65",
         borderBottomColor: '#fff',
+        backgroundColor: "#fff",
         marginBottom:15,
         fontSize:16,
     },
@@ -328,6 +329,15 @@ export const styles = StyleSheet.create({
         position: "relative"
         
     },
+    classifiedImage2: {
+        height: 200,
+        width: 340,
+        borderWidth:2,
+        borderColor:PRIMARY_COLOR,
+        zIndex: -1,
+        position: "relative"
+        
+    },
     picItem: {
         position: "relative"
     },
@@ -386,8 +396,8 @@ export const styles = StyleSheet.create({
     },
     uploadImage:{
         marginTop:40,
-        height:200,
-        width:200,
+        height:400,
+        width:400,
     },
     identifyButton:{
         marginBottom:20,
@@ -422,12 +432,59 @@ export const styles = StyleSheet.create({
         marginTop:20,
     },
     renameModal: {
-        height: "30%",
-        width: "100%",
+        height: 200,
+        width: "80%",
         backgroundColor: "white",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center"
-    }
+        justifyContent: "center",
+        color:PRIMARY_COLOR,
+        borderRadius:20,
+        marginLeft:40,
+        borderColor:PRIMARY_COLOR,
+        borderWidth:2,
+    },
+    identifyInput:{
+        minWidth: 40,
+        height: 60,
+        justifyContent: "center",
+        width:"80%",
+        backgroundColor: "#fff",
+        borderBottomColor: '#fff',
+        marginBottom:15,
+        fontSize:16,
+    },
+    outfitContainer:{
+        height:"100%",
+    },
+    buffer:{
+        marginTop:40,
+        width: "100%",
+        height:20,
+        backgroundColor:PRIMARY_COLOR,
+    },
+    outfitPortal:{
+        alignItems: "center",
+        justifyContent: "center",
+        
+    },
+    outfitModal1:{
+        borderRadius:20,
+        color:PRIMARY_COLOR,
+        alignItems: "center",
+        justifyContent: "center",
+        
+    },
+    modalText1:{
+        fontWeight:'bold',
+        fontSize:18,
+        marginBottom:10,
+    },
+    drawModal:{
+        marginLeft:40,
+    },
+    drawContainer:{
+
+    },
 })

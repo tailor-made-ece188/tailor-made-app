@@ -9,6 +9,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import * as WebBrowser from 'expo-web-browser';
 import { useContext, useEffect, useState } from "react";
 import { getAssociatedProducts, updateAssociatedCategory, getAssociatedCategories } from "../../db/mongoFunctions";
+import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
+
 import { AuthContext } from "../../navigation/AuthProvider";
 type OutfitProps = StackScreenProps<ProfileStackParamList, 'Outfit'>;
 export default function Outfit(props: OutfitProps) {
@@ -21,7 +23,8 @@ export default function Outfit(props: OutfitProps) {
     const [viewClassified, setViewClassified] = useState(true);
     const [localCategoryNames, setLocalCategoryNames] = useState(categoryNames ?? []);
     const [renameCategoryIndex, setRenameCategoryIndex] = useState(-1);
-
+    const [modal, setModal] = useState(false);
+    const [modalImage, setModalImage] = useState(null);
     //load up the category names on mount to resync
     useEffect(() => {
         async function attemptGetCategories(){
@@ -50,7 +53,7 @@ export default function Outfit(props: OutfitProps) {
         key={category}
         contentStyle={{
             backgroundColor: displayedFilters[ind] ? PRIMARY_COLOR : "white",
-            height:50,
+            height:40,
         }}
         color={displayedFilters[ind] ? "white" : PRIMARY_COLOR}
         mode="outlined"
@@ -90,8 +93,15 @@ export default function Outfit(props: OutfitProps) {
         return displayedFilters[ind] ? <ClothingTypeDisplay itemList={group} itemCategory={localCategoryNames[ind] ?? "Category " + (ind+1)} key={ind} />
         : []
     });
-
-
+    const srcImage = {
+        filename: {},
+        directory: '', 
+        mode: 'AspectFill'
+      }
+    function drawImage(){
+        setModal(true);
+        
+    }
  
     //useEffect once categories list is loaded
     useEffect(() => {
@@ -104,7 +114,7 @@ export default function Outfit(props: OutfitProps) {
     }, [categoryNames])
     return (
         <Provider>
-            <Portal>
+            <Portal >
                 <Modal visible={ renameCategoryIndex !== -1} onDismiss={() => setRenameCategoryIndex(-1)} contentContainerStyle={styles.renameModal}>
                     <RenameCategory 
                         categoryName={localCategoryNames[renameCategoryIndex] ?? ""}  
@@ -113,36 +123,58 @@ export default function Outfit(props: OutfitProps) {
                         setRenameCategoryIndex={setRenameCategoryIndex}
                         imageName={pic.image_name}
                     />
+                </Modal>
+                <Modal visible={modal} onDismiss={()=>setModal(false)} contentContainerStyle={styles.drawModal}>
+                    <View style={styles.drawContainer}>
+                        {/* <SketchCanvas
+                            style={{ flex: 1 }}
+                            strokeColor={'red'}
+                            strokeWidth={7}
+                        /> */}
+                        <Image style={styles.classifiedImage2} source={{
+                                        uri: props.route.params.pic.uploaded_image
+                                    }
+                                    } />
+                        <Button>Upload</Button>
+                    </View>
+
                 </Modal> 
             </Portal>
-            <View>
+            
+            <View style={styles.outfitContainer}>
                 {/* <View style={styles.flexRow}>
 
                 </View> */}
                 <ScrollView contentContainerStyle={styles.categoryRow} horizontal={true} alwaysBounceVertical={false} showsVerticalScrollIndicator={false}>
                     <Button  onPress={() => setViewClassified(prev=> !prev) }
+                        style={styles.buttonRowButton}
                         contentStyle={{
                             backgroundColor: viewClassified ? PRIMARY_COLOR : "white",
                             zIndex: 3,
-                            height: 50
+                            height:40,
                         }}
-                        style={styles.buttonRowButton}
                         color={viewClassified ? "white" : PRIMARY_COLOR}
                         mode="outlined"
                         >
-                            View Classified?
+                            View Classified
                     </Button>
                     {displayedCategories}
                 </ScrollView>
+                {/* <View style={styles.buffer}></View> */}
                 {
                     viewClassified && 
-                            <Image style={styles.classifiedImage} source={{
+                    <TouchableOpacity onPress={() => drawImage()}>
+                    <View style={styles.classifiedImageRow}>
+                        {
+                            <Image style={styles.classifiedImage2} source={{
                                 uri: props.route.params.pic.segmented_image
                             }
                             } />
-                        
-
+                        }
+                    </View>
+                    </TouchableOpacity>
                 }
+                
                 <ScrollView>
                     {displayedItems}
                 </ScrollView>
@@ -228,11 +260,13 @@ function RenameCategory(props: RenameProps){
         props.setRenameCategoryIndex(-1);
     }
     return(
-        <View>
-            <Text>
-                Rename {props.categoryName}?
+        <View style={styles.outfitModal1}>
+            <Text style={styles.modalText1}>
+                Rename {props.categoryName}
             </Text>
             <TextInput
+                    selectionColor={PRIMARY_COLOR}
+                    activeUnderlineColor={PRIMARY_COLOR}
                     label="New Category Title"
                     value={currentText}
                     onChangeText={text => setCurrentText(text)}
@@ -240,7 +274,7 @@ function RenameCategory(props: RenameProps){
                     autoComplete={false}
                     style={styles.renameInput}
                 />
-                <Button onPress={() => adjustCategory(props.ind)}>Confirm</Button>
+                <Button color={PRIMARY_COLOR} onPress={() => adjustCategory(props.ind)}>Confirm</Button>
         </View>
     )
 }

@@ -12,6 +12,7 @@ import { grabUserImages } from "../../db/mongoFunctions";
 import { Camera, CameraType } from 'expo-camera';
 import { withNavigationFocus } from "react-navigation";
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
+import { useIsFocused } from '@react-navigation/native';
 
 
 export default function Identify(props: IdentifyProps) {
@@ -76,7 +77,7 @@ export default function Identify(props: IdentifyProps) {
         setHasPermission(status === 'granted');
     }
     
-
+    const isFocused = useIsFocused()
     const __takePicture = async () => {
         if (cameraRef && cameraRef.current){
             const photo = await cameraRef.current.takePictureAsync();
@@ -115,8 +116,8 @@ export default function Identify(props: IdentifyProps) {
             <View style={styles.cameraContainer}>
                 { (!selected && hasPermission) 
                 ?
-                <Camera     
-                    type={type} style={styles.camera} ref={cameraRef} > 
+                isFocused && <Camera     
+                type={type} style={styles.camera} ref={cameraRef} > 
                 <View >
                     
                     <TouchableOpacity onPress={__takePicture} style={styles.cameraCapture}>
@@ -148,7 +149,7 @@ export default function Identify(props: IdentifyProps) {
                         value={imageName} 
                         onChangeText={imageName => setImageName(imageName)} 
                         autoComplete={false}
-                        style={styles.input}
+                        style={styles.identifyInput}
                         autoCapitalize={"none"}
                     />
                 </View> : null
@@ -159,7 +160,7 @@ export default function Identify(props: IdentifyProps) {
                                 value={imageName} 
                                 onChangeText={imageName => setImageName(imageName)} 
                                 autoComplete={false}
-                                style={styles.nameInput}
+                                style={styles.identifyInput}
                                 autoCapitalize={"none"}
                             /> : null}
                 {imURI ? <Button mode="text" contentStyle={styles.identifyButton2} onPress={() => attemptUpload(imageName)} >Upload</Button> : null}

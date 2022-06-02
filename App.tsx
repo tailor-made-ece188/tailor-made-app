@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, LogBox } from 'react-native';
 import NavigationStack from './navigation/NavigationStack';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { PRIMARY_COLOR } from './styles';
@@ -14,6 +14,7 @@ const tailorMadeTheme = {
 }
 
 export default function App() {
+  LogBox.ignoreAllLogs();
   return (
     <PaperProvider theme={tailorMadeTheme}>
       <NavigationStack />

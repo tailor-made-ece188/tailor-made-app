@@ -159,7 +159,7 @@ export function PicItem(props: PicItemProps){
                 <TouchableOpacity 
                 activeOpacity={0.9}
                 onPress={async () => {
-                    if(props.pic.categoryNames && props.pic.similarClothes)
+                    if(props.pic.categoryNames && props.pic.similarClothes && props.pic.segmented_image)
                         props.moveToOutfitPage(props.pic);
                     else {
                         //alert("Please wait, getting related clothes! May take 30 seconds. Sit tight!");
@@ -205,6 +205,10 @@ export function PicItem(props: PicItemProps){
 function LoadingModal(){
     return(
         <View>
+            <Image
+                    style={styles.landingImage}
+                    source={require('../../assets/tailor-made3.png')}
+                />
             <ActivityIndicator animating={true} color={Colors.red800} />
             <Text>Sit tight, our tailors are at work finding the best clothes for you!</Text> 
         </View>
