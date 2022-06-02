@@ -10,6 +10,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { useContext, useEffect, useState } from "react";
 import { getAssociatedProducts, updateAssociatedCategory, getAssociatedCategories } from "../../db/mongoFunctions";
 import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
+import CanvasSketch from './Canvas'
 
 import { AuthContext } from "../../navigation/AuthProvider";
 type OutfitProps = StackScreenProps<ProfileStackParamList, 'Outfit'>;
@@ -42,7 +43,7 @@ export default function Outfit(props: OutfitProps) {
         }
         attemptGetCategories();
     }, [])
-
+    var sketch = new CanvasSketch();
     const displayedCategories = localCategoryNames.map((category,ind) => 
         <Button  style={styles.buttonRowButton} onPress={() => setDisplayedFilters(prev=> {
             const newFilters = [...prev];
@@ -126,15 +127,11 @@ export default function Outfit(props: OutfitProps) {
                 </Modal>
                 <Modal visible={modal} onDismiss={()=>setModal(false)} contentContainerStyle={styles.drawModal}>
                     <View style={styles.drawContainer}>
-                        {/* <SketchCanvas
-                            style={{ flex: 1 }}
-                            strokeColor={'red'}
-                            strokeWidth={7}
-                        /> */}
-                        <Image style={styles.classifiedImage2} source={{
+                        <CanvasSketch/>
+                        {/* <Image style={styles.classifiedImage2} source={{
                                         uri: props.route.params.pic.uploaded_image
                                     }
-                                    } />
+                                    } /> */}
                         
                         <Button>Upload</Button>
                         <ConfidenceTable confidences={pic.confidences ?? []} imageName={pic.image_name}/>

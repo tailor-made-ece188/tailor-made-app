@@ -485,6 +485,7 @@ export const styles = StyleSheet.create({
         marginLeft:40,
     },
     drawContainer:{
-
+        backgroundColor:"#fff",
+        
     },
 })

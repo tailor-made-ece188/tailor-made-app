@@ -22,7 +22,7 @@ export interface UploadedPicture {
     confidences?: Confidence[]
 }
 
-interface Confidence {
+export interface Confidence {
     score: number;
     label: string
 }
