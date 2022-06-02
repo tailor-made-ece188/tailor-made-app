@@ -59,7 +59,7 @@ export default function Profile(props: ProfileProps) {
                 <View style={styles.profileContainer3}>
                     <Text style={styles.profileTitleText}>Profile</Text>
                     <Button color={PRIMARY_COLOR} labelStyle={{ color: '#fff', fontSize: 12 }} contentStyle={styles.buttonBackInner} style={styles.profileLogoutButton}onPress={() => attemptLogout()} mode="contained" >Log Out</Button>
-                    <Text style={styles.profileSubtitleText}>Your Uploaded Pics</Text>
+                    <Text style={styles.profileSubtitleText}>Your Pictures</Text>
                     { isLoading ? <LoadingModal/> :
                     <ScrollView >{PicIcons}</ScrollView>
     }
@@ -148,7 +148,7 @@ export function PicItem(props: PicItemProps){
             <View >
             {    isSameUser && 
                 <TouchableOpacity style = {styles.publicToggle} onPress={() => attemptTogglePublic(props.pic)}>
-                    <MaterialCommunityIcon name="star-circle-outline" size={50} color={ currPublic ? "#f2c71d" : "white"} style={{
+                    <MaterialCommunityIcon name="account-multiple" size={50} color={ currPublic ? PRIMARY_COLOR : "white"} style={{
                         backgroundColor: "transparent",
                         width: 50,
                         borderRadius: 5

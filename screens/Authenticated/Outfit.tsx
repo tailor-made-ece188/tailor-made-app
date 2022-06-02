@@ -21,13 +21,14 @@ export default function Outfit(props: OutfitProps) {
     const [viewClassified, setViewClassified] = useState(true);
     const [localCategoryNames, setLocalCategoryNames] = useState(categoryNames ?? [])
     const displayedCategories = localCategoryNames.map((category,ind) => 
-        <Button  onPress={() => setDisplayedFilters(prev=> {
+        <Button  style={styles.buttonRowButton} onPress={() => setDisplayedFilters(prev=> {
             const newFilters = [...prev];
             newFilters[ind] = !newFilters[ind];
             return newFilters;
         }) } key={category}
         contentStyle={{
             backgroundColor: displayedFilters[ind] ? PRIMARY_COLOR : "white",
+            height:50,
         }}
         color={displayedFilters[ind] ? "white" : PRIMARY_COLOR}
         mode="outlined"
@@ -80,22 +81,8 @@ export default function Outfit(props: OutfitProps) {
         setDisplayedFilters(filterArr);
     }, [categoryNames])
     return (
-        <View>
-            <View style={styles.flexRow}>
-                <Button  onPress={() => setViewClassified(prev=> !prev) }
-                contentStyle={{
-                    backgroundColor: viewClassified ? PRIMARY_COLOR : "white",
-                }}
-                color={viewClassified ? "white" : PRIMARY_COLOR}
-                mode="outlined"
-                >
-                    View Classified?
-                </Button>
-            </View>
-            <View style={styles.flexRow}>
-
-            {displayedCategories}
-            </View>
+        <View style={styles.container}>
+            
             <View style={styles.flexRow}>
             {
                     viewClassified && <Image style={styles.classifiedImage} source={{
@@ -105,8 +92,24 @@ export default function Outfit(props: OutfitProps) {
                     } />
                 }
             </View>
+            
             <ScrollView>
                 {displayedItems}
+            </ScrollView>
+            <ScrollView horizontal={true} style={styles.buttonRow}>
+                <Button  style={styles.buttonRowButton} onPress={() => setViewClassified(prev=> !prev) }
+                contentStyle={{
+                    backgroundColor: viewClassified ? PRIMARY_COLOR : "white",
+                    height:50,
+                }}
+                color={viewClassified ? "white" : PRIMARY_COLOR}
+                mode="outlined"
+                >
+                    View Classified
+                </Button>
+            
+
+            {displayedCategories}
             </ScrollView>
         </View>
     )
@@ -128,7 +131,7 @@ function ClothingTypeDisplay(props: ClothingTypeDisplayProps) {
 
     return (
         <View>
-            <Text>{props.itemCategory}</Text>
+            <Text style={styles.outfitType}>{props.itemCategory}</Text>
             {displayedArticles}
         </View>
     )
@@ -143,16 +146,19 @@ function ArticleDisplay(props: ArticleDisplayProps) {
         await WebBrowser.openBrowserAsync(url);
     }
     return (
-        <View>
-            <Text>
+        <View style={styles.outfitDisplay}>
+            <Text style={styles.outfitName}>
                 {props.item.name}
             </Text>
-            <Text>
-                {`Vendor: ${props.item.vendor ?? 'NOT LISTED'}`}
-            </Text>
-            <Text>
-                {`PRICE: $${props.item.price}`}
-            </Text>
+            <View style={styles.outfitText}>
+                <Text>
+                    {`Vendor: ${props.item.vendor ?? 'NOT LISTED'}`}
+                </Text>
+                <Text>
+                    {`Price: $${props.item.price}`}
+                </Text>
+            </View>
+
             <TouchableOpacity onPress={async() => openProductPage(props.item.url ?? '')}>
                 <Image style={styles.similarImage} source= {{
                         uri: props.item.matching_image ?? ''

@@ -1,3 +1,4 @@
+import { PrivateValueStore } from "@react-navigation/native";
 import { relative } from "path";
 import { StyleSheet } from "react-native";
 export const PRIMARY_COLOR = '#FE5F55'
@@ -57,10 +58,18 @@ export const styles = StyleSheet.create({
         backgroundColor: '#FE5F55',
     },
     flexRow: {
-        display: "flex",
-        flexDirection: "row",
         justifyContent: "center",
-        flexWrap: "wrap"
+        marginTop:45,
+    },
+    buttonRow:{
+        position:'absolute',
+        height:50,
+        elevation:2,
+        top:0,
+        backgroundColor: '#00000000'
+    },
+    buttonRowButton:{
+        height:50,
     },
     containerLanding: {
         alignItems: 'center',
@@ -264,15 +273,16 @@ export const styles = StyleSheet.create({
     },
     similarImage: {
         height: 175,
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
+        left:-10,
+        
     },
     
     classifiedImage: {
-        height: 320,
-        width: 200,
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
+        height: 350,
+        width: 400,
+        borderWidth:2,
+        borderColor:PRIMARY_COLOR,
+        
     },
     picItem: {
         position: "relative"
@@ -308,8 +318,10 @@ export const styles = StyleSheet.create({
     },
     cameraContainer:{
         width:"100%",
-        height:"100%"
-        
+        height:"100%",
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignContent: "center",
     },
     cameraFlip:{
         fontSize:16,
@@ -340,5 +352,27 @@ export const styles = StyleSheet.create({
     },
     identifyContainer:{
         marginBottom:-40,
+    },
+    outfitName:{
+        fontSize:18,
+        fontWeight:'bold',
+        
+    },
+    outfitText:{
+        marginBottom:5,
+        fontSize:16,
+    },
+    outfitType:{
+        fontSize:28,
+        backgroundColor:PRIMARY_COLOR,
+        paddingLeft:10,
+        color:'white',
+        marginTop:20,
+        fontWeight:'bold',
+        elevation:8,
+    },
+    outfitDisplay:{
+        marginLeft:10,
+        marginTop:20,
     },
 })

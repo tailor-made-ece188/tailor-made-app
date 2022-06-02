@@ -28,8 +28,8 @@ export default function Public(props: PublicProps) {
     const displayedOutfits = publicOutfits.map(outfit=> (<PicItem pic={outfit} key={outfit._id} moveToOutfitPage={moveToOutfitPage} setIsLoading={setIsLoading}/>))
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.homeSquare1}></View>
-            <View style={styles.homeSquare2}></View>
+            {/* <View style={styles.homeSquare1}></View>
+            <View style={styles.homeSquare2}></View> */}
             <ScrollView>
                 {displayedOutfits}
             </ScrollView>
