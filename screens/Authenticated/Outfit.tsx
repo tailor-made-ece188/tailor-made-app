@@ -115,30 +115,34 @@ export default function Outfit(props: OutfitProps) {
                 </Modal> 
             </Portal>
             <View>
-                <View style={styles.flexRow}>
-                    <Button  onPress={() => setViewClassified(prev=> !prev) }
-                    contentStyle={{
-                        backgroundColor: viewClassified ? PRIMARY_COLOR : "white",
-                    }}
-                    color={viewClassified ? "white" : PRIMARY_COLOR}
-                    mode="outlined"
-                    >
-                        View Classified?
-                    </Button>
-                </View>
-                <View style={styles.flexRow}>
+                {/* <View style={styles.flexRow}>
 
-                {displayedCategories}
-                </View>
-                <View style={styles.flexRow}>
+                </View> */}
+                <ScrollView contentContainerStyle={styles.categoryRow} horizontal={true} alwaysBounceVertical={false} showsVerticalScrollIndicator={false}>
+                    <Button  onPress={() => setViewClassified(prev=> !prev) }
+                        contentStyle={{
+                            backgroundColor: viewClassified ? PRIMARY_COLOR : "white",
+                            zIndex: 3
+                        }}
+                        color={viewClassified ? "white" : PRIMARY_COLOR}
+                        mode="outlined"
+                        >
+                            View Classified?
+                    </Button>
+                    {displayedCategories}
+                </ScrollView>
                 {
-                        viewClassified && <Image style={styles.classifiedImage} source={{
-                            uri: props.route.params.pic.segmented_image
+                    viewClassified && 
+                    <View style={styles.classifiedImageRow}>
+                        {
+                            <Image style={styles.classifiedImage} source={{
+                                uri: props.route.params.pic.segmented_image
+                            }
+                            } />
                         }
-                        
-                        } />
-                    }
-                </View>
+                    </View>
+                }
+                
                 <ScrollView>
                     {displayedItems}
                 </ScrollView>

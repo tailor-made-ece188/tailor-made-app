@@ -67,6 +67,23 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         flexWrap: "wrap"
     },
+    classifiedImageRow: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        flexWrap: "wrap",
+        marginTop: 10,
+        backgroundColor: "transparent"
+    },
+    categoryRow: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        height: 40,
+        zIndex: 4,
+        elevation: 1,
+        marginBottom: 5
+    },
     containerLanding: {
         alignItems: 'center',
         justifyContent: 'center',
