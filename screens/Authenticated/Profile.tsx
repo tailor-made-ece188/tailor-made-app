@@ -164,9 +164,14 @@ export function PicItem(props: PicItemProps){
                     else {
                         //alert("Please wait, getting related clothes! May take 30 seconds. Sit tight!");
                         props.setIsLoading(true);
-                        const classifyRes = await classifyImage(props.pic.image_name, userToken);
                         const associatedRes = await findAssociatedProducts(props.pic.image_name, userToken);
-                        if(associatedRes && classifyRes){
+                        const classifyRes = await classifyImage(props.pic.image_name, userToken);
+                        if(!classifyRes){
+                            alert("Error, model server did not work!");
+                        }
+                        if(!associatedRes){
+                            alert("Error, backend server could not get images!");
+                        }
                             const newImages= await grabUserImages(userToken);
                             const newImage = findImage(newImages,props.pic.image_name);
                             setUserPics(newImages);
@@ -178,10 +183,6 @@ export function PicItem(props: PicItemProps){
                                 alert("Error getting information!");
                                 props.setIsLoading(false);
                             }
-                        }
-                        else {
-                            props.setIsLoading(false);
-                        }
                         
                     }
                 }}
